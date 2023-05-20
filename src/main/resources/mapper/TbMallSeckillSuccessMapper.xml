@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microne.mall.dao.TbMallSeckillSuccessMapper">
+
+    <resultMap type="com.microne.mall.entity.TbMallSeckillSuccess" id="TbMallSeckillSuccessMap">
+        <result property="secId" column="sec_id" jdbcType="INTEGER"/>
+        <result property="seckillId" column="seckill_id" jdbcType="INTEGER"/>
+        <result property="userId" column="user_id" jdbcType="INTEGER"/>
+        <result property="state" column="state" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TbMallSeckillSuccessMap">
+        select sec_id,
+               seckill_id,
+               user_id,
+               state,
+               create_time
+        from tb_mall_seckill_success
+        where sec_id = #{secId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TbMallSeckillSuccessMap">
+        select
+        sec_id, seckill_id, user_id, state, create_time
+        from tb_mall_seckill_success
+        <where>
+            <if test="secId != null">
+                and sec_id = #{secId}
+            </if>
+            <if test="seckillId != null">
+                and seckill_id = #{seckillId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tb_mall_seckill_success
+        <where>
+            <if test="secId != null">
+                and sec_id = #{secId}
+            </if>
+            <if test="seckillId != null">
+                and seckill_id = #{seckillId}
+            </if>
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+            <if test="state != null">
+                and state = #{state}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="secId" useGeneratedKeys="true">
+        insert into tb_mall_seckill_success(seckill_id, user_id, state, create_time)
+        values (#{seckillId}, #{userId}, #{state}, #{createTime})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="secId" useGeneratedKeys="true">
+        insert into tb_mall_seckill_success(seckill_id, user_id, state, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.seckillId}, #{entity.userId}, #{entity.state}, #{entity.createTime})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="secId" useGeneratedKeys="true">
+        insert into tb_mall_seckill_success(seckill_id, user_id, state, create_time)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.seckillId}, #{entity.userId}, #{entity.state}, #{entity.createTime})
+        </foreach>
+        on duplicate key update
+        seckill_id = values(seckill_id),
+        user_id = values(user_id),
+        state = values(state),
+        create_time = values(create_time)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tb_mall_seckill_success
+        <set>
+            <if test="seckillId != null">
+                seckill_id = #{seckillId},
+            </if>
+            <if test="userId != null">
+                user_id = #{userId},
+            </if>
+            <if test="state != null">
+                state = #{state},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+        </set>
+        where sec_id = #{secId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from tb_mall_seckill_success
+        where sec_id = #{secId}
+    </delete>
+
+</mapper>
+

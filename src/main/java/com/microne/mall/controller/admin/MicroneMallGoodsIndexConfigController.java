@@ -6,6 +6,7 @@ import com.microne.mall.common.MicroneMallException;
 import com.microne.mall.common.ServiceResultEnum;
 import com.microne.mall.entity.IndexConfig;
 import com.microne.mall.util.PageQueryUtil;
+import com.microne.mall.util.PageResult;
 import com.microne.mall.util.Result;
 import com.microne.mall.util.ResultGenerator;
 import org.springframework.stereotype.Controller;
@@ -37,7 +38,7 @@ public class MicroneMallGoodsIndexConfigController {
         if (indexConfigTypeEnum.equals(IndexConfigTypeEnum.DEFAULT)) {
             MicroneMallException.fail("参数异常");
         }
-
+        System.out.println(indexConfigTypeEnum.getName());
         request.setAttribute("path", indexConfigTypeEnum.getName());
         request.setAttribute("configType", configType);
         return "admin/mall_index_config";
@@ -53,7 +54,9 @@ public class MicroneMallGoodsIndexConfigController {
             return ResultGenerator.genFailResult("参数异常！");
         }
         PageQueryUtil pageUtil = new PageQueryUtil(params);
-        return ResultGenerator.genSuccessResult(MicroneMallIndexConfigService.getConfigsPage(pageUtil));
+        PageResult configsPage = MicroneMallIndexConfigService.getConfigsPage(pageUtil);
+        System.out.println(configsPage.toString());
+        return ResultGenerator.genSuccessResult(configsPage);
     }
 
     /**

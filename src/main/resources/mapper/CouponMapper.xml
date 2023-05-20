@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microne.mall.dao.CouponMapper">
+
+    <resultMap type="com.microne.mall.entity.TbMallCoupon" id="TbMallCouponMap">
+        <result property="couponId" column="coupon_id" jdbcType="INTEGER"/>
+        <result property="couponName" column="coupon_name" jdbcType="VARCHAR"/>
+        <result property="couponDesc" column="coupon_desc" jdbcType="VARCHAR"/>
+        <result property="couponTotal" column="coupon_total" jdbcType="INTEGER"/>
+        <result property="discount" column="discount" jdbcType="INTEGER"/>
+        <result property="min" column="min" jdbcType="INTEGER"/>
+        <result property="couponLimit" column="coupon_limit" jdbcType="INTEGER"/>
+        <result property="couponType" column="coupon_type" jdbcType="INTEGER"/>
+        <result property="couponStatus" column="coupon_status" jdbcType="INTEGER"/>
+        <result property="goodsType" column="goods_type" jdbcType="INTEGER"/>
+        <result property="goodsValue" column="goods_value" jdbcType="VARCHAR"/>
+        <result property="couponCode" column="coupon_code" jdbcType="VARCHAR"/>
+        <result property="couponStartTime" column="coupon_start_time" jdbcType="TIMESTAMP"/>
+        <result property="couponEndTime" column="coupon_end_time" jdbcType="TIMESTAMP"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TbMallCouponMap">
+        select coupon_id,
+               coupon_name,
+               coupon_desc,
+               coupon_total,
+               discount,
+               min,
+               coupon_limit,
+               coupon_type,
+               coupon_status,
+               goods_type,
+               goods_value,
+               coupon_code,
+               coupon_start_time,
+               coupon_end_time,
+               create_time,
+               update_time,
+               is_deleted
+        from tb_mall_coupon
+        where coupon_id = #{couponId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TbMallCouponMap">
+        select
+        coupon_id, coupon_name, coupon_desc, coupon_total, discount, min, coupon_limit, coupon_type, coupon_status,
+        goods_type, goods_value, coupon_code, coupon_start_time, coupon_end_time, create_time, update_time, is_deleted
+        from tb_mall_coupon
+        <where>
+            <if test="couponId != null">
+                and coupon_id = #{couponId}
+            </if>
+            <if test="couponName != null and couponName != ''">
+                and coupon_name = #{couponName}
+            </if>
+            <if test="couponDesc != null and couponDesc != ''">
+                and coupon_desc = #{couponDesc}
+            </if>
+            <if test="couponTotal != null">
+                and coupon_total = #{couponTotal}
+            </if>
+            <if test="discount != null">
+                and discount = #{discount}
+            </if>
+            <if test="min != null">
+                and min = #{min}
+            </if>
+            <if test="couponLimit != null">
+                and coupon_limit = #{couponLimit}
+            </if>
+            <if test="couponType != null">
+                and coupon_type = #{couponType}
+            </if>
+            <if test="couponStatus != null">
+                and coupon_status = #{couponStatus}
+            </if>
+            <if test="goodsType != null">
+                and goods_type = #{goodsType}
+            </if>
+            <if test="goodsValue != null and goodsValue != ''">
+                and goods_value = #{goodsValue}
+            </if>
+            <if test="couponCode != null and couponCode != ''">
+                and coupon_code = #{couponCode}
+            </if>
+            <if test="couponStartTime != null">
+                and coupon_start_time = #{couponStartTime}
+            </if>
+            <if test="couponEndTime != null">
+                and coupon_end_time = #{couponEndTime}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="isDeleted != null">
+                and is_deleted = #{isDeleted}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tb_mall_coupon
+        <where>
+            <if test="couponId != null">
+                and coupon_id = #{couponId}
+            </if>
+            <if test="couponName != null and couponName != ''">
+                and coupon_name = #{couponName}
+            </if>
+            <if test="couponDesc != null and couponDesc != ''">
+                and coupon_desc = #{couponDesc}
+            </if>
+            <if test="couponTotal != null">
+                and coupon_total = #{couponTotal}
+            </if>
+            <if test="discount != null">
+                and discount = #{discount}
+            </if>
+            <if test="min != null">
+                and min = #{min}
+            </if>
+            <if test="couponLimit != null">
+                and coupon_limit = #{couponLimit}
+            </if>
+            <if test="couponType != null">
+                and coupon_type = #{couponType}
+            </if>
+            <if test="couponStatus != null">
+                and coupon_status = #{couponStatus}
+            </if>
+            <if test="goodsType != null">
+                and goods_type = #{goodsType}
+            </if>
+            <if test="goodsValue != null and goodsValue != ''">
+                and goods_value = #{goodsValue}
+            </if>
+            <if test="couponCode != null and couponCode != ''">
+                and coupon_code = #{couponCode}
+            </if>
+            <if test="couponStartTime != null">
+                and coupon_start_time = #{couponStartTime}
+            </if>
+            <if test="couponEndTime != null">
+                and coupon_end_time = #{couponEndTime}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="isDeleted != null">
+                and is_deleted = #{isDeleted}
+            </if>
+        </where>
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="couponId" useGeneratedKeys="true">
+        insert into tb_mall_coupon(coupon_name, coupon_desc, coupon_total, discount, min, coupon_limit, coupon_type,
+                                   coupon_status, goods_type, goods_value, coupon_code, coupon_start_time,
+                                   coupon_end_time, create_time, update_time, is_deleted)
+        values (#{couponName}, #{couponDesc}, #{couponTotal}, #{discount}, #{min}, #{couponLimit}, #{couponType},
+                #{couponStatus}, #{goodsType}, #{goodsValue}, #{couponCode}, #{couponStartTime}, #{couponEndTime},
+                #{createTime}, #{updateTime}, #{isDeleted})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="couponId" useGeneratedKeys="true">
+        insert into tb_mall_coupon(coupon_name, coupon_desc, coupon_total, discount, min, coupon_limit, coupon_type,
+        coupon_status, goods_type, goods_value, coupon_code, coupon_start_time, coupon_end_time, create_time,
+        update_time, is_deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.couponName}, #{entity.couponDesc}, #{entity.couponTotal}, #{entity.discount}, #{entity.min},
+            #{entity.couponLimit}, #{entity.couponType}, #{entity.couponStatus}, #{entity.goodsType},
+            #{entity.goodsValue}, #{entity.couponCode}, #{entity.couponStartTime}, #{entity.couponEndTime},
+            #{entity.createTime}, #{entity.updateTime}, #{entity.isDeleted})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="couponId" useGeneratedKeys="true">
+        insert into tb_mall_coupon(coupon_name, coupon_desc, coupon_total, discount, min, coupon_limit, coupon_type,
+        coupon_status, goods_type, goods_value, coupon_code, coupon_start_time, coupon_end_time, create_time,
+        update_time, is_deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.couponName}, #{entity.couponDesc}, #{entity.couponTotal}, #{entity.discount}, #{entity.min},
+            #{entity.couponLimit}, #{entity.couponType}, #{entity.couponStatus}, #{entity.goodsType},
+            #{entity.goodsValue}, #{entity.couponCode}, #{entity.couponStartTime}, #{entity.couponEndTime},
+            #{entity.createTime}, #{entity.updateTime}, #{entity.isDeleted})
+        </foreach>
+        on duplicate key update
+        coupon_name = values(coupon_name),
+        coupon_desc = values(coupon_desc),
+        coupon_total = values(coupon_total),
+        discount = values(discount),
+        min = values(min),
+        coupon_limit = values(coupon_limit),
+        coupon_type = values(coupon_type),
+        coupon_status = values(coupon_status),
+        goods_type = values(goods_type),
+        goods_value = values(goods_value),
+        coupon_code = values(coupon_code),
+        coupon_start_time = values(coupon_start_time),
+        coupon_end_time = values(coupon_end_time),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        is_deleted = values(is_deleted)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tb_mall_coupon
+        <set>
+            <if test="couponName != null and couponName != ''">
+                coupon_name = #{couponName},
+            </if>
+            <if test="couponDesc != null and couponDesc != ''">
+                coupon_desc = #{couponDesc},
+            </if>
+            <if test="couponTotal != null">
+                coupon_total = #{couponTotal},
+            </if>
+            <if test="discount != null">
+                discount = #{discount},
+            </if>
+            <if test="min != null">
+                min = #{min},
+            </if>
+            <if test="couponLimit != null">
+                coupon_limit = #{couponLimit},
+            </if>
+            <if test="couponType != null">
+                coupon_type = #{couponType},
+            </if>
+            <if test="couponStatus != null">
+                coupon_status = #{couponStatus},
+            </if>
+            <if test="goodsType != null">
+                goods_type = #{goodsType},
+            </if>
+            <if test="goodsValue != null and goodsValue != ''">
+                goods_value = #{goodsValue},
+            </if>
+            <if test="couponCode != null and couponCode != ''">
+                coupon_code = #{couponCode},
+            </if>
+            <if test="couponStartTime != null">
+                coupon_start_time = #{couponStartTime},
+            </if>
+            <if test="couponEndTime != null">
+                coupon_end_time = #{couponEndTime},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted},
+            </if>
+        </set>
+        where coupon_id = #{couponId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from tb_mall_coupon
+        where coupon_id = #{couponId}
+    </delete>
+
+</mapper>
+

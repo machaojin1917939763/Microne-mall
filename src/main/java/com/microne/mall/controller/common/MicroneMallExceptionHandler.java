@@ -39,7 +39,7 @@ public class MicroneMallExceptionHandler {
             modelAndView.addObject("message", e.getMessage());
             modelAndView.addObject("url", req.getRequestURL());
             modelAndView.addObject("stackTrace", e.getStackTrace());
-            modelAndView.addObject("author", "十三");
+            modelAndView.addObject("author", "马超金");
             modelAndView.addObject("ltd", "微盟商城");
             modelAndView.setViewName("error/error");
             return modelAndView;

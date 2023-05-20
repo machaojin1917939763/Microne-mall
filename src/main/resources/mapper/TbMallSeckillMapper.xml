@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.microne.mall.dao.TbMallSeckillMapper">
+
+    <resultMap type="com.microne.mall.entity.TbMallSeckill" id="TbMallSeckillMap">
+        <result property="seckillId" column="seckill_id" jdbcType="INTEGER"/>
+        <result property="goodsId" column="goods_id" jdbcType="INTEGER"/>
+        <result property="seckillPrice" column="seckill_price" jdbcType="INTEGER"/>
+        <result property="seckillNum" column="seckill_num" jdbcType="INTEGER"/>
+        <result property="seckillStatus" column="seckill_status" jdbcType="INTEGER"/>
+        <result property="seckillBegin" column="seckill_begin" jdbcType="TIMESTAMP"/>
+        <result property="seckillEnd" column="seckill_end" jdbcType="TIMESTAMP"/>
+        <result property="seckillRank" column="seckill_rank" jdbcType="INTEGER"/>
+        <result property="createTime" column="create_time" jdbcType="TIMESTAMP"/>
+        <result property="updateTime" column="update_time" jdbcType="TIMESTAMP"/>
+        <result property="isDeleted" column="is_deleted" jdbcType="INTEGER"/>
+    </resultMap>
+
+    <!--查询单个-->
+    <select id="queryById" resultMap="TbMallSeckillMap">
+        select seckill_id,
+               goods_id,
+               seckill_price,
+               seckill_num,
+               seckill_status,
+               seckill_begin,
+               seckill_end,
+               seckill_rank,
+               create_time,
+               update_time,
+               is_deleted
+        from tb_mall_seckill
+        where seckill_id = #{seckillId}
+    </select>
+
+    <!--查询指定行数据-->
+    <select id="queryAllByLimit" resultMap="TbMallSeckillMap">
+        select
+        seckill_id, goods_id, seckill_price, seckill_num, seckill_status, seckill_begin, seckill_end, seckill_rank,
+        create_time, update_time, is_deleted
+        from tb_mall_seckill
+        <where>
+            <if test="seckillId != null">
+                and seckill_id = #{seckillId}
+            </if>
+            <if test="goodsId != null">
+                and goods_id = #{goodsId}
+            </if>
+            <if test="seckillPrice != null">
+                and seckill_price = #{seckillPrice}
+            </if>
+            <if test="seckillNum != null">
+                and seckill_num = #{seckillNum}
+            </if>
+            <if test="seckillStatus != null">
+                and seckill_status = #{seckillStatus}
+            </if>
+            <if test="seckillBegin != null">
+                and seckill_begin = #{seckillBegin}
+            </if>
+            <if test="seckillEnd != null">
+                and seckill_end = #{seckillEnd}
+            </if>
+            <if test="seckillRank != null">
+                and seckill_rank = #{seckillRank}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="isDeleted != null">
+                and is_deleted = #{isDeleted}
+            </if>
+        </where>
+        limit #{pageable.offset}, #{pageable.pageSize}
+    </select>
+
+    <!--统计总行数-->
+    <select id="count" resultType="java.lang.Long">
+        select count(1)
+        from tb_mall_seckill
+        <where>
+            <if test="seckillId != null">
+                and seckill_id = #{seckillId}
+            </if>
+            <if test="goodsId != null">
+                and goods_id = #{goodsId}
+            </if>
+            <if test="seckillPrice != null">
+                and seckill_price = #{seckillPrice}
+            </if>
+            <if test="seckillNum != null">
+                and seckill_num = #{seckillNum}
+            </if>
+            <if test="seckillStatus != null">
+                and seckill_status = #{seckillStatus}
+            </if>
+            <if test="seckillBegin != null">
+                and seckill_begin = #{seckillBegin}
+            </if>
+            <if test="seckillEnd != null">
+                and seckill_end = #{seckillEnd}
+            </if>
+            <if test="seckillRank != null">
+                and seckill_rank = #{seckillRank}
+            </if>
+            <if test="createTime != null">
+                and create_time = #{createTime}
+            </if>
+            <if test="updateTime != null">
+                and update_time = #{updateTime}
+            </if>
+            <if test="isDeleted != null">
+                and is_deleted = #{isDeleted}
+            </if>
+        </where>
+    </select>
+    <select id="querySeckillAll" resultMap="TbMallSeckillMap">
+        select seckill_id,
+               goods_id,
+               seckill_price,
+               seckill_num,
+               seckill_status,
+               seckill_begin,
+               seckill_end,
+               seckill_rank,
+               create_time,
+               update_time,
+               is_deleted
+        from tb_mall_seckill
+    </select>
+
+    <!--新增所有列-->
+    <insert id="insert" keyProperty="seckillId" useGeneratedKeys="true">
+        insert into tb_mall_seckill(goods_id, seckill_price, seckill_num, seckill_status, seckill_begin, seckill_end,
+                                    seckill_rank, create_time, update_time, is_deleted)
+        values (#{goodsId}, #{seckillPrice}, #{seckillNum}, #{seckillStatus}, #{seckillBegin}, #{seckillEnd},
+                #{seckillRank}, #{createTime}, #{updateTime}, #{isDeleted})
+    </insert>
+
+    <insert id="insertBatch" keyProperty="seckillId" useGeneratedKeys="true">
+        insert into tb_mall_seckill(goods_id, seckill_price, seckill_num, seckill_status, seckill_begin, seckill_end,
+        seckill_rank, create_time, update_time, is_deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.goodsId}, #{entity.seckillPrice}, #{entity.seckillNum}, #{entity.seckillStatus},
+            #{entity.seckillBegin}, #{entity.seckillEnd}, #{entity.seckillRank}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.isDeleted})
+        </foreach>
+    </insert>
+
+    <insert id="insertOrUpdateBatch" keyProperty="seckillId" useGeneratedKeys="true">
+        insert into tb_mall_seckill(goods_id, seckill_price, seckill_num, seckill_status, seckill_begin, seckill_end,
+        seckill_rank, create_time, update_time, is_deleted)
+        values
+        <foreach collection="entities" item="entity" separator=",">
+            (#{entity.goodsId}, #{entity.seckillPrice}, #{entity.seckillNum}, #{entity.seckillStatus},
+            #{entity.seckillBegin}, #{entity.seckillEnd}, #{entity.seckillRank}, #{entity.createTime},
+            #{entity.updateTime}, #{entity.isDeleted})
+        </foreach>
+        on duplicate key update
+        goods_id = values(goods_id),
+        seckill_price = values(seckill_price),
+        seckill_num = values(seckill_num),
+        seckill_status = values(seckill_status),
+        seckill_begin = values(seckill_begin),
+        seckill_end = values(seckill_end),
+        seckill_rank = values(seckill_rank),
+        create_time = values(create_time),
+        update_time = values(update_time),
+        is_deleted = values(is_deleted)
+    </insert>
+
+    <!--通过主键修改数据-->
+    <update id="update">
+        update tb_mall_seckill
+        <set>
+            <if test="goodsId != null">
+                goods_id = #{goodsId},
+            </if>
+            <if test="seckillPrice != null">
+                seckill_price = #{seckillPrice},
+            </if>
+            <if test="seckillNum != null">
+                seckill_num = #{seckillNum},
+            </if>
+            <if test="seckillStatus != null">
+                seckill_status = #{seckillStatus},
+            </if>
+            <if test="seckillBegin != null">
+                seckill_begin = #{seckillBegin},
+            </if>
+            <if test="seckillEnd != null">
+                seckill_end = #{seckillEnd},
+            </if>
+            <if test="seckillRank != null">
+                seckill_rank = #{seckillRank},
+            </if>
+            <if test="createTime != null">
+                create_time = #{createTime},
+            </if>
+            <if test="updateTime != null">
+                update_time = #{updateTime},
+            </if>
+            <if test="isDeleted != null">
+                is_deleted = #{isDeleted},
+            </if>
+        </set>
+        where seckill_id = #{seckillId}
+    </update>
+
+    <!--通过主键删除-->
+    <delete id="deleteById">
+        delete
+        from tb_mall_seckill
+        where seckill_id = #{seckillId}
+    </delete>
+
+</mapper>
+

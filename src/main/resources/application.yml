@@ -1,0 +1,60 @@
+spring:
+  datasource:
+    druid:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      username: root
+      password: machaojin
+      url: jdbc:mysql://localhost:3306/mall-project?useUnicode=true&serverTimezone=Asia/Shanghai&characterEncoding=utf8&autoReconnect=true&useSSL=false&allowMultiQueries=true
+      min-idle: 5
+      connect-timeout: 30000
+      default-auto-commit: true
+      filters: stat,wall,log4j2
+      #开启页面监控好
+      web-stat-filter:
+        enabled: true
+        url-pattern: /*
+        #排除一些不必要的url
+        exclusions: \*.js,\*.gif,\*.jpg,\*.png,\*.css,\*.ico,/druid/*
+        #开启session统计功能
+        session-stat-enable: true
+        #缺省sessionStatMaxCount是1000个
+        session-stat-max-count: 100
+
+      ##### StatViewServlet配置 #######
+
+      stat-view-servlet:
+        #启用内置的监控页面
+        enabled: true
+        #内置监控页面的地址
+        url-pattern: /druid/*
+        #关闭 Reset All 功能
+        reset-enable: false
+        login-username: admin
+        login-password: 123
+        #白名单
+        allow: 127.0.0.1
+        #黑名单
+        deny:
+  ##### redis缓存配置 #######
+  cache:
+    redis:
+      cache-null-values: true
+      key-prefix: MICRONE_
+      use-key-prefix: true
+      time-to-live: 1800000
+      enable-statistics: true
+      #使用redis作为缓存
+    type: redis
+  redis:
+    url: redis://127.0.0.1:6379
+    port: 6379
+    database: 0
+    password:
+    jedis:
+      pool:
+        enabled: true
+        max-active: 8
+        max-wait: 1ms
+        #最大空闲
+        max-idle: 8
+        min-idle: 0

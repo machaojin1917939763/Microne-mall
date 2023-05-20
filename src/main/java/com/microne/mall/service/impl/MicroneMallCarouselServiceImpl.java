@@ -10,7 +10,11 @@ import com.microne.mall.util.BeanUtil;
 import com.microne.mall.util.PageQueryUtil;
 import com.microne.mall.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -18,12 +22,14 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class MicroneMallCarouselServiceImpl implements MicroneMallCarouselService {
 
     @Autowired
     private CarouselMapper carouselMapper;
 
     @Override
+    @Cacheable(value = "carousel",keyGenerator = "myKeyGenerator",sync = true)
     public PageResult getCarouselPage(PageQueryUtil pageUtil) {
         List<Carousel> carousels = carouselMapper.findCarouselList(pageUtil);
         int total = carouselMapper.getTotalCarousels(pageUtil);
@@ -32,6 +38,7 @@ public class MicroneMallCarouselServiceImpl implements MicroneMallCarouselServic
     }
 
     @Override
+    @CacheEvict(value = "carousel",keyGenerator = "myKeyGenerator",allEntries = true)
     public String saveCarousel(Carousel carousel) {
         if (carouselMapper.insertSelective(carousel) > 0) {
             return ServiceResultEnum.SUCCESS.getResult();
@@ -40,6 +47,7 @@ public class MicroneMallCarouselServiceImpl implements MicroneMallCarouselServic
     }
 
     @Override
+    @CacheEvict(value = "carousel",keyGenerator = "myKeyGenerator",allEntries = true)
     public String updateCarousel(Carousel carousel) {
         Carousel temp = carouselMapper.selectByPrimaryKey(carousel.getCarouselId());
         if (temp == null) {
@@ -56,11 +64,13 @@ public class MicroneMallCarouselServiceImpl implements MicroneMallCarouselServic
     }
 
     @Override
+    @Cacheable(value = "carousel",keyGenerator = "myKeyGenerator",sync = true)
     public Carousel getCarouselById(Integer id) {
         return carouselMapper.selectByPrimaryKey(id);
     }
 
     @Override
+    @CacheEvict(value = "carousel",keyGenerator = "myKeyGenerator",allEntries = true)
     public Boolean deleteBatch(Integer[] ids) {
         if (ids.length < 1) {
             return false;
@@ -70,6 +80,7 @@ public class MicroneMallCarouselServiceImpl implements MicroneMallCarouselServic
     }
 
     @Override
+    @Cacheable(value = "carouse",keyGenerator = "myKeyGenerator",sync = true)
     public List<MicroneMallIndexCarouselVO> getCarouselsForIndex(int number) {
         List<MicroneMallIndexCarouselVO> MicroneMallIndexCarouselVOS = new ArrayList<>(number);
         List<Carousel> carousels = carouselMapper.findCarouselsByNum(number);

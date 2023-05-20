@@ -17,6 +17,8 @@ import com.microne.mall.util.NumberUtil;
 import com.microne.mall.util.PageQueryUtil;
 import com.microne.mall.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
+@Transactional
 public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
 
     @Autowired
@@ -49,7 +52,6 @@ public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
     }
 
     @Override
-    @Transactional
     public String updateOrderInfo(MicroneMallOrder MicroneMallOrder) {
         MicroneMallOrder temp = MicroneMallOrderMapper.selectByPrimaryKey(MicroneMallOrder.getOrderId());
         //不为空且orderStatus>=0且状态为出库之前可以修改部分信息
@@ -66,7 +68,6 @@ public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
     }
 
     @Override
-    @Transactional
     public String checkDone(Long[] ids) {
         //查询所有的订单 判断状态 修改状态和更新时间
         List<MicroneMallOrder> orders = MicroneMallOrderMapper.selectByPrimaryKeys(Arrays.asList(ids));
@@ -102,7 +103,6 @@ public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
     }
 
     @Override
-    @Transactional
     public String checkOut(Long[] ids) {
         //查询所有的订单 判断状态 修改状态和更新时间
         List<MicroneMallOrder> orders = MicroneMallOrderMapper.selectByPrimaryKeys(Arrays.asList(ids));
@@ -138,7 +138,6 @@ public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
     }
 
     @Override
-    @Transactional
     public String closeOrder(Long[] ids) {
         //查询所有的订单 判断状态 修改状态和更新时间
         List<MicroneMallOrder> orders = MicroneMallOrderMapper.selectByPrimaryKeys(Arrays.asList(ids));
@@ -176,7 +175,6 @@ public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
     }
 
     @Override
-    @Transactional
     public String saveOrder(MicroneMallUserVO user, List<MicroneMallShoppingCartItemVO> myShoppingCartItems) {
         List<Long> itemIdList = myShoppingCartItems.stream().map(MicroneMallShoppingCartItemVO::getCartItemId).collect(Collectors.toList());
         List<Long> goodsIds = myShoppingCartItems.stream().map(MicroneMallShoppingCartItemVO::getGoodsId).collect(Collectors.toList());
@@ -316,7 +314,6 @@ public class MicroneMallOrderServiceImpl implements MicroneMallOrderService {
     }
 
     @Override
-    @Transactional
     public String cancelOrder(String orderNo, Long userId) {
         MicroneMallOrder MicroneMallOrder = MicroneMallOrderMapper.selectByOrderNo(orderNo);
         if (MicroneMallOrder != null) {

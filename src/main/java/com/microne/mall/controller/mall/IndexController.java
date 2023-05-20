@@ -41,7 +41,19 @@ public class IndexController {
         request.setAttribute("carousels", carousels);//轮播图
         request.setAttribute("hotGoodses", hotGoodses);//热销商品
         request.setAttribute("newGoodses", newGoodses);//新品
+        recommendGoodses.forEach((recommendGoodse) -> {
+            if (recommendGoodse.getTag() == null || recommendGoodse.getTag().equals("")) {
+                recommendGoodse.setTag("商城主推");
+            }
+        });
+        System.out.println(recommendGoodses.size());
+        System.out.println(recommendGoodses);
         request.setAttribute("recommendGoodses", recommendGoodses);//推荐商品
         return "mall/index";
+    }
+
+    @GetMapping("/seckillPage")
+    public String toSeckill(){
+        return "mall/miaosha";
     }
 }

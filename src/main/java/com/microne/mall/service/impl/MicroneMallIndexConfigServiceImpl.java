@@ -12,7 +12,11 @@ import com.microne.mall.util.BeanUtil;
 import com.microne.mall.util.PageQueryUtil;
 import com.microne.mall.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -21,6 +25,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class MicroneMallIndexConfigServiceImpl implements MicroneMallIndexConfigService {
 
     @Autowired
@@ -30,6 +35,7 @@ public class MicroneMallIndexConfigServiceImpl implements MicroneMallIndexConfig
     private MicroneMallGoodsMapper goodsMapper;
 
     @Override
+    @Cacheable(value = "configService",sync = true,keyGenerator = "myKeyGenerator")
     public PageResult getConfigsPage(PageQueryUtil pageUtil) {
         List<IndexConfig> indexConfigs = indexConfigMapper.findIndexConfigList(pageUtil);
         int total = indexConfigMapper.getTotalIndexConfigs(pageUtil);
@@ -38,6 +44,7 @@ public class MicroneMallIndexConfigServiceImpl implements MicroneMallIndexConfig
     }
 
     @Override
+    @CacheEvict(value = "configService",keyGenerator = "myKeyGenerator",allEntries = true)
     public String saveIndexConfig(IndexConfig indexConfig) {
         if (goodsMapper.selectByPrimaryKey(indexConfig.getGoodsId()) == null) {
             return ServiceResultEnum.GOODS_NOT_EXIST.getResult();
@@ -52,6 +59,7 @@ public class MicroneMallIndexConfigServiceImpl implements MicroneMallIndexConfig
     }
 
     @Override
+    @CacheEvict(value = "configService",keyGenerator = "myKeyGenerator",allEntries = true)
     public String updateIndexConfig(IndexConfig indexConfig) {
         if (goodsMapper.selectByPrimaryKey(indexConfig.getGoodsId()) == null) {
             return ServiceResultEnum.GOODS_NOT_EXIST.getResult();
@@ -73,11 +81,13 @@ public class MicroneMallIndexConfigServiceImpl implements MicroneMallIndexConfig
     }
 
     @Override
+    @Cacheable(value = "configService",sync = true,keyGenerator = "myKeyGenerator")
     public IndexConfig getIndexConfigById(Long id) {
         return null;
     }
 
     @Override
+    @Cacheable(value = "configService",sync = true,keyGenerator = "myKeyGenerator")
     public List<MicroneMallIndexConfigGoodsVO> getConfigGoodsesForIndex(int configType, int number) {
         List<MicroneMallIndexConfigGoodsVO> MicroneMallIndexConfigGoodsVOS = new ArrayList<>(number);
         List<IndexConfig> indexConfigs = indexConfigMapper.findIndexConfigsByTypeAndNum(configType, number);
@@ -104,6 +114,7 @@ public class MicroneMallIndexConfigServiceImpl implements MicroneMallIndexConfig
     }
 
     @Override
+    @CacheEvict(value = "configService",allEntries = true,keyGenerator = "myKeyGenerator")
     public Boolean deleteBatch(Long[] ids) {
         if (ids.length < 1) {
             return false;

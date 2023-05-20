@@ -6,10 +6,12 @@ import com.microne.mall.entity.AdminUser;
 import com.microne.mall.dao.AdminUserMapper;
 import com.microne.mall.util.MD5Util;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 
 @Service
+@Transactional
 public class AdminUserServiceImpl implements AdminUserService {
 
     @Resource

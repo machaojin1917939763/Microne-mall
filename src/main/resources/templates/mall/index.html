@@ -6,7 +6,9 @@
 <body>
 <header th:replace="mall/header::header-fragment"></header>
 <content id="content">
-    <nav th:replace="mall/header::nav-fragment"></nav>
+    <nav th:replace="mall/header::nav-fragment">
+    </nav>
+
     <div id="banner">
         <div class="all-sort-list">
             <th:block th:each="category : ${categories}">
@@ -43,18 +45,6 @@
                         </div>
                     </th:block>
                 </th:block>
-                <!-- 未配置轮播图则显示默认的三张轮播图 -->
-                <th:block th:if="${#lists.isEmpty(carousels)}">
-                    <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner01.jpg" alt="">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner02.jpg" alt="">
-                    </div>
-                    <div class="swiper-slide">
-                        <img src="./mall/image/swiper/banner03.jpg" alt="">
-                    </div>
-                </th:block>
             </div>
             <div class="swiper-pagination"></div>
             <div class="swiper-button-prev"></div>
@@ -64,38 +54,20 @@
 
     <div id="sub_banner">
         <!-- 已配置热销商品则显示配置内容 -->
-        <th:block th:unless="${#lists.isEmpty(hotGoodses)}">
-            <th:block th:each="hotGoodse : ${hotGoodses}">
-                <div class="hot-image">
-                    <a th:href="@{'/goods/detail/'+${hotGoodse.goodsId}}">
-                        <img th:src="@{${hotGoodse.goodsCoverImg}}" th:alt="${hotGoodse.goodsName}">
-                    </a>
-                </div>
-            </th:block>
-        </th:block>
-        <!-- 未配置热销商品则显示默认 -->
-        <th:block th:if="${#lists.isEmpty(hotGoodses)}">
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/r4.jpg" alt="">
-                </a>
-            </div>
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/hot2.jpg" alt="">
-                </a>
-            </div>
-            <div class="hot-image">
-                <a href="##">
-                    <img src="../../static/mall/image/sub_banner/hot3.jpg" alt="">
-                </a>
-            </div>
-            <div class="hot-image">
-                <a href="##">
-                    <img src="./mall/image/sub_banner/hot4.jpg" alt="">
-                </a>
-            </div>
-        </th:block>
+<!--        <th:block th:unless="${#lists.isEmpty(hotGoodses)}">-->
+<!--            <th:block th:each="hotGoodse : ${hotGoodses}">-->
+<!--                <div class="hot-image">-->
+<!--                    <a th:href="@{'/goods/detail/'+${hotGoodse.goodsId}}">-->
+<!--                        <img th:src="@{${hotGoodse.goodsCoverImg}}" th:alt="${hotGoodse.goodsName}">-->
+<!--                    </a>-->
+<!--                </div>-->
+<!--            </th:block>-->
+<!--        </th:block>-->
+        <ul class="list">
+            <li><a href="/seckillPage">秒杀专区<img src="/mall/image/icon-seckill.png"></a></li>
+            <li><a href="/couponList">优惠券<img src="/mall/image/icon-coupon.png"></a></li>
+        </ul>
+
     </div>
 
     <div id="flash">
@@ -350,4 +322,12 @@
 <script th:src="@{/mall/js/index.js}" type="text/javascript"></script>
 <script th:src="@{/mall/js/search.js}" type="text/javascript"></script>
 </body>
+<style>
+    .list{
+        display: flex;
+        margin: 0 10px;
+        font-size: 30px;
+        flex-wrap: wrap;
+    }
+</style>
 </html>

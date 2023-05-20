@@ -15,7 +15,11 @@ import com.microne.mall.util.BeanUtil;
 import com.microne.mall.util.PageQueryUtil;
 import com.microne.mall.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.*;
@@ -24,12 +28,14 @@ import java.util.stream.Collectors;
 import static java.util.stream.Collectors.groupingBy;
 
 @Service
+@Transactional
 public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryService {
 
     @Autowired
     private GoodsCategoryMapper goodsCategoryMapper;
 
     @Override
+    @Cacheable(value = "category",sync = true,keyGenerator = "myKeyGenerator")
     public PageResult getCategorisPage(PageQueryUtil pageUtil) {
         List<GoodsCategory> goodsCategories = goodsCategoryMapper.findGoodsCategoryList(pageUtil);
         int total = goodsCategoryMapper.getTotalGoodsCategories(pageUtil);
@@ -38,6 +44,7 @@ public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryServic
     }
 
     @Override
+    @CacheEvict(value = "category",keyGenerator = "myKeyGenerator",allEntries = true)
     public String saveCategory(GoodsCategory goodsCategory) {
         GoodsCategory temp = goodsCategoryMapper.selectByLevelAndName(goodsCategory.getCategoryLevel(), goodsCategory.getCategoryName());
         if (temp != null) {
@@ -50,6 +57,7 @@ public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryServic
     }
 
     @Override
+    @CacheEvict(value = "category",keyGenerator = "myKeyGenerator",allEntries = true)
     public String updateGoodsCategory(GoodsCategory goodsCategory) {
         GoodsCategory temp = goodsCategoryMapper.selectByPrimaryKey(goodsCategory.getCategoryId());
         if (temp == null) {
@@ -68,11 +76,13 @@ public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryServic
     }
 
     @Override
+    @Cacheable(value = "category",sync = true,keyGenerator = "myKeyGenerator")
     public GoodsCategory getGoodsCategoryById(Long id) {
         return goodsCategoryMapper.selectByPrimaryKey(id);
     }
 
     @Override
+    @CacheEvict(value = {"category"},allEntries = true)
     public Boolean deleteBatch(Integer[] ids) {
         if (ids.length < 1) {
             return false;
@@ -82,6 +92,7 @@ public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryServic
     }
 
     @Override
+    @Cacheable(value = "category",keyGenerator = "myKeyGenerator",sync = true)
     public List<MicroneMallIndexCategoryVO> getCategoriesForIndex() {
         List<MicroneMallIndexCategoryVO> MicroneMallIndexCategoryVOS = new ArrayList<>();
         //获取一级分类的固定数量的数据
@@ -135,6 +146,7 @@ public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryServic
     }
 
     @Override
+    @Cacheable(value = "category",sync = true,key = "#categoryId")
     public SearchPageCategoryVO getCategoriesForSearch(Long categoryId) {
         SearchPageCategoryVO searchPageCategoryVO = new SearchPageCategoryVO();
         GoodsCategory thirdLevelGoodsCategory = goodsCategoryMapper.selectByPrimaryKey(categoryId);
@@ -154,6 +166,7 @@ public class MicroneMallCategoryServiceImpl implements MicroneMallCategoryServic
     }
 
     @Override
+    @Cacheable(value = "category",keyGenerator = "myKeyGenerator",sync = true)
     public List<GoodsCategory> selectByLevelAndParentIdsAndNumber(List<Long> parentIds, int categoryLevel) {
         return goodsCategoryMapper.selectByLevelAndParentIdsAndNumber(parentIds, categoryLevel, 0);//0代表查询所有
     }

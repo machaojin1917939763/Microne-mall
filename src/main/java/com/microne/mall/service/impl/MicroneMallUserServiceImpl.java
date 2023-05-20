@@ -10,12 +10,14 @@ import com.microne.mall.dao.MallUserMapper;
 import com.microne.mall.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Service
+@Transactional
 public class MicroneMallUserServiceImpl implements MicroneMallUserService {
 
     @Autowired

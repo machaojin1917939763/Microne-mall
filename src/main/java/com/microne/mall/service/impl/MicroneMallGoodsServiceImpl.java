@@ -15,7 +15,11 @@ import com.microne.mall.util.MicroneMallUtils;
 import com.microne.mall.util.PageQueryUtil;
 import com.microne.mall.util.PageResult;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.CollectionUtils;
 
 import java.util.ArrayList;
@@ -23,6 +27,7 @@ import java.util.Date;
 import java.util.List;
 
 @Service
+@Transactional
 public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
 
     @Autowired
@@ -31,6 +36,7 @@ public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
     private GoodsCategoryMapper goodsCategoryMapper;
 
     @Override
+    @Cacheable(value = "goods",sync = true,keyGenerator = "myKeyGenerator")
     public PageResult getMicroneMallGoodsPage(PageQueryUtil pageUtil) {
         List<MicroneMallGoods> goodsList = goodsMapper.findMicroneMallGoodsList(pageUtil);
         int total = goodsMapper.getTotalMicroneMallGoods(pageUtil);
@@ -39,6 +45,7 @@ public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
     }
 
     @Override
+    @CacheEvict(value = "goods",keyGenerator = "myKeyGenerator",allEntries = true)
     public String saveMicroneMallGoods(MicroneMallGoods goods) {
         GoodsCategory goodsCategory = goodsCategoryMapper.selectByPrimaryKey(goods.getGoodsCategoryId());
         // 分类不存在或者不是三级分类，则该参数字段异常
@@ -58,6 +65,7 @@ public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
     }
 
     @Override
+    @CacheEvict(value = "goods",keyGenerator = "myKeyGenerator",allEntries = true)
     public void batchSaveMicroneMallGoods(List<MicroneMallGoods> MicroneMallGoodsList) {
         if (!CollectionUtils.isEmpty(MicroneMallGoodsList)) {
             goodsMapper.batchInsert(MicroneMallGoodsList);
@@ -65,6 +73,7 @@ public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
     }
 
     @Override
+    @CacheEvict(value = "goods",keyGenerator = "myKeyGenerator",allEntries = true)
     public String updateMicroneMallGoods(MicroneMallGoods goods) {
         GoodsCategory goodsCategory = goodsCategoryMapper.selectByPrimaryKey(goods.getGoodsCategoryId());
         // 分类不存在或者不是三级分类，则该参数字段异常
@@ -91,6 +100,7 @@ public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
     }
 
     @Override
+    @Cacheable(value = "goods",sync = true,keyGenerator = "myKeyGenerator")
     public MicroneMallGoods getMicroneMallGoodsById(Long id) {
         MicroneMallGoods MicroneMallGoods = goodsMapper.selectByPrimaryKey(id);
         if (MicroneMallGoods == null) {
@@ -100,11 +110,13 @@ public class MicroneMallGoodsServiceImpl implements MicroneMallGoodsService {
     }
 
     @Override
+    @CacheEvict(value = "goods",keyGenerator = "myKeyGenerator",allEntries = true)
     public Boolean batchUpdateSellStatus(Long[] ids, int sellStatus) {
         return goodsMapper.batchUpdateSellStatus(ids, sellStatus) > 0;
     }
 
     @Override
+    @Cacheable(value = "goods",sync = true,keyGenerator = "myKeyGenerator")
     public PageResult searchMicroneMallGoods(PageQueryUtil pageUtil) {
         List<MicroneMallGoods> goodsList = goodsMapper.findMicroneMallGoodsListBySearch(pageUtil);
         int total = goodsMapper.getTotalMicroneMallGoodsBySearch(pageUtil);

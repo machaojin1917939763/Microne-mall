@@ -3,7 +3,7 @@
     float: left;
     width: 228px;
     border-top: none;
-    background: #000;
+    background: #ffffff;
     height: 100%;
 }
 
@@ -32,7 +32,7 @@
 }
 
 .all-sort-list .item a {
-    color: #fff;
+    color: #0e0e0e;
     text-decoration: none;
 }
 
@@ -240,8 +240,9 @@
     width: 1226px;
     flex-shrink: 0;
     justify-content: space-between;
-    height: 295px;
+    height: 20px;
     margin-top: 15px;
+    margin-left: 0;
 }
 
 #content #sub_banner .selector {
@@ -392,7 +393,6 @@
     font-size: 28px;
     color: #605751;
 }
-
 #content #recommend {
     width: 1226px;
     position: relative;

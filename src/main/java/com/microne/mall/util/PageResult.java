@@ -80,4 +80,14 @@ public class PageResult implements Serializable {
         this.list = list;
     }
 
+    @Override
+    public String toString() {
+        return "PageResult{" +
+                "totalCount=" + totalCount +
+                ", pageSize=" + pageSize +
+                ", totalPage=" + totalPage +
+                ", currPage=" + currPage +
+                ", list=" + list +
+                '}';
+    }
 }
