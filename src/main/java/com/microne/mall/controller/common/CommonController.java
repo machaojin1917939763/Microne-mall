@@ -29,6 +29,7 @@ public class CommonController {
         ShearCaptcha shearCaptcha= CaptchaUtil.createShearCaptcha(150, 30, 4, 2);
 
         // 验证码存入session
+        System.out.println(shearCaptcha.getCode());
         httpServletRequest.getSession().setAttribute("verifyCode", shearCaptcha);
 
         // 输出图片流
